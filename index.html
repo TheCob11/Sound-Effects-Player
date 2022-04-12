@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Sound Effects</title>
+	<script src="sound.js"></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<h1>Sound Effects</h1>
+	<button id="openFilesButton" onclick="openFiles()" class="unopened">Choose audio file directory</button>
+	<button id="uploadFileButton" onclick="uploadFile()">Upload audio</button>
+	<br>
+	<table>
+		<colgroup>
+			<col span="8">
+			<col span="1" id="actionCol">
+		</colgroup>
+		<thead>
+			<tr>
+				<th prop="page">Page</th>
+				<th prop="ref">Script Reference</th>
+				<th prop="name">Name</th>
+				<th prop="file">Sound</th>
+				<th prop="currentVol">Current Volume (%)</th>
+				<th prop="volume">Volume (%)</th>
+				<th prop="currentTime">Current Time (sec)</th>
+				<th prop="start">Start Time (sec)</th>
+				<th prop="notes">Notes</th>
+				<th prop="actions">Actions (Hover for Description)</th>
+			</tr>
+		</thead>
+		<tbody id="soundTBody">
+		</tbody>
+	</table>
+	<button id="editAllButton" onclick="editSounds()">Edit all sounds</button>
+	<button id="saveAllButton" onclick="saveButtonClick()">Save</button>
+	<h3 id="saveStatus"></h3>
+	<script src="setup.js"></script>
+</body>
+
+</html>

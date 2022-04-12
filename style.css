@@ -1,0 +1,70 @@
+body {
+    background-color: #111;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #ccc;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #1a1a1a;
+    text-align: left;
+    padding: 5px;
+}
+
+tr {
+    transition: all .2s ease-in;
+}
+
+tbody tr:hover {
+    background-color: #222;
+}
+
+button {
+    border: 1px solid white;
+    border-radius: 8.5px;
+    padding: 2px;
+    background-color: #1b1b1b;
+    color: #ccc;
+    transition: .3s;
+}
+
+button:hover {
+    background-color: #e4e4e4;
+    color: #333;
+}
+
+td[prop="actions"] button {
+    font-weight: bold;
+    margin: 2px;
+}
+
+#saveStatus {
+    position: absolute;
+    top: 1vh;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 3s;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+body {
+    transition: .25s;
+}
+
+body.saving *:not(#saveStatus) {
+    filter: blur(1px);
+}
+
+body.saving #saveStatus {
+    opacity: 1;
+    transition: opacity 0s;
+}
+
+.unopened~* {
+    display: none;
+}
