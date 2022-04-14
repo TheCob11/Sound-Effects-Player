@@ -69,10 +69,10 @@ document.onkeyup=function(e){
   }
   var audio = new Audio();
 	if(e.key=="w") {
-    audio.src = "Other/SlideWhistleDown.wav"
+    audio.src = "Other/SlideWhistleUp.wav"
 	}
   if(e.key=="s") {
-    audio.src = "Other/SlideWhistleUp.wav";
+    audio.src = "Other/SlideWhistleDown.wav";
   }
   audio.play();
   return true;
