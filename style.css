@@ -37,6 +37,38 @@ button:hover {
     color: #333;
 }
 
+#whapham {
+    position: fixed;
+    top: 0%;
+    left: 0%;
+}
+
+.whapham {
+    animation: rotate 1s linear infinite, cross 3s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes cross {
+    0% {
+        top: 0vh;
+        left: 0vw;
+    }
+
+    100% {
+        top: 100vh;
+        left: 100vw;
+    }
+}
+
 input.fadeInput {
     width: 6ch;
 }
