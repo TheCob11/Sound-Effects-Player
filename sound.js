@@ -73,6 +73,7 @@
 				cellInput.value = this[cell.prop]
 				if (typeof this[cell.prop] == "number") {
 					cellInput.type = "number"
+					cellInput.step = "any"
 					if (cell.prop == "volume" || cell.prop == "start") {
 						cellInput.min = 0;
 						cellInput.max = 100;

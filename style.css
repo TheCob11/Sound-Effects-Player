@@ -37,6 +37,10 @@ button:hover {
     color: #333;
 }
 
+input.fadeInput {
+    width: 6ch;
+}
+
 td[prop="actions"] button {
     font-weight: bold;
     margin: 2px;
