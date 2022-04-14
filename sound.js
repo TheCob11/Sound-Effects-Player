@@ -120,6 +120,9 @@
 		}
 		this.fadeFactor = factor;
 		this.fadeStarted = Date.now();
+		if(this.audioElem.paused){
+			this.audioElem.play();
+		}
 		return new Promise(resolve => {
 			this.fade = setInterval(() => {
 				if (this.audioElem.volume <= .01) {
