@@ -18,10 +18,12 @@
 				this.elem.querySelector(`[prop=${prop}]`).innerText = this[prop];
 			}
 			if (prop == "volume") {
-				this.audioElem.volume = this[prop] / 100
+				this.audioElem.volume = (this[prop] / 100).toFixed(2)
+				this[prop] = val.toFixed(2)
 			}
 			if (prop == "start" && this.audioElem.paused) {
-				this.audioElem.currentTime = this[prop]
+				this.audioElem.currentTime = (this[prop]).toFixed(2)
+				this[prop] = val.toFixed(2)
 			}
 		}
 	}
