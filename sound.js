@@ -113,7 +113,7 @@
 		for (i in this) {
 			if (i == "file") {
 				reduced[i] = this[i].name
-			} else if (i == "elem" || i == "audioElem") {
+			} else if (i == "elem" || i == "audioElem" || (i.startsWith("fade") && i!="fade")) {
 				continue
 			} else {
 				reduced[i] = this[i]
