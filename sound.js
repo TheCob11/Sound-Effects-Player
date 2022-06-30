@@ -136,7 +136,7 @@
 			}, 50)
 		})
 	}
-	async timeFade(time=4.5) {
+	async timeFade(time=1) {
 		return await this.factorFade((.99 / (100 * this.audioElem.volume)) ** (50 / (1000 * time - 50)))
 	}
 }
