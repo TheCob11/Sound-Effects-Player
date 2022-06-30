@@ -66,10 +66,10 @@
 						};
 					}
 					this.audioElem.onvolumechange = () => {
-						this.elem.querySelector("[prop=currentVol").innerText = this.audioElem.volume * 100;
+						this.elem.querySelector("[prop=currentVol").innerText = (this.audioElem.volume * 100).toFixed(2);
 					}
 					this.audioElem.ontimeupdate = () => {
-						this.elem.querySelector("[prop=currentTime]").innerText = this.audioElem.currentTime;
+						this.elem.querySelector("[prop=currentTime]").innerText = (this.audioElem.currentTime).toFixed(2);
 					}
 				}
 				this.audioElem.currentTime = this.start || 0;
