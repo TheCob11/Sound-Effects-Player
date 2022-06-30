@@ -102,18 +102,6 @@ function addActions(elem, blockActions = []) {
         timeMirrorButton.innerText = "🖫 → ◷"
         timeMirrorButton.onclick = e => e.target.parentElement.parentElement.sound.audioElem.currentTime = e.target.parentElement.parentElement.sound.start;
     }
-	function addFadeButton() {
-        var fadeInput = cell.appendChild(document.createElement("input"))
-        fadeInput.classList.add("fadeInput");
-        fadeInput.type = "number";
-        fadeInput.value = 1;
-        fadeInput.title = "Time(in seconds) to fade out";
-		var fadeButton = cell.appendChild(document.createElement("button"))
-		fadeButton.classList.add("fadeButton");
-		fadeButton.title = "Fade out sound across given time";
-        fadeButton.innerText = "🕪→🕨"
-		fadeButton.onclick = e => e.target.parentElement.parentElement.sound.timeFade(fadeInput.value);
-	}
     if (!blockActions.includes("edit")) {
         addEditButton()
     }
@@ -131,9 +119,6 @@ function addActions(elem, blockActions = []) {
     }
     if (!blockActions.includes("timeMirror")) {
         addTimeMirrorButton()
-    }
-    if (!blockActions.includes("fade")) {
-        addFadeButton()
     }
 }
 async function openFiles() {

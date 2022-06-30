@@ -1,5 +1,5 @@
 ﻿class Sound {
-	constructor(file, name = file ? file.name : "", page = 0, ref = "", volume = 100, start = 0, notes = "") {
+	constructor(file, name = file ? file.name : "", page = 0, ref = "", volume = 100, start = 0, notes = "", fade=1) {
 		this.page = page
 		this.ref = ref
 		this.name = name
@@ -7,6 +7,7 @@
 		this.volume = volume
 		this.start = start
 		this.notes = notes
+		this.fade = fade
 	}
 	setProp(prop, val) {
 		this[prop] = val
@@ -33,6 +34,11 @@
 			var cell = this.elem.appendChild(document.createElement("td"))
 			cell.prop = i.getAttribute("prop")
 			cell.setAttribute("prop", cell.prop)
+			if (cell.prop == "fade") {
+				this.fadeButton = cell.appendChild(document.createElement("button"));
+				this.fadeButton.innerText = "Fade"
+				this.fadeButton.onclick = () => this.timeFade(this.fade);
+			}
 			if (cell.prop == "actions") {
 				continue
 			} else if (cell.prop == "currentVol") {
@@ -95,7 +101,8 @@
 					}
 				}
 			} else {
-				cell.innerText = this[cell.prop]
+				cell.label = cell.appendChild(document.createElement("p"));
+				cell.label.innerText = this[cell.prop];
 			}
 		}
 		this.audioElem.load();
@@ -120,15 +127,15 @@
 		}
 		this.fadeFactor = factor;
 		this.fadeStarted = Date.now();
-		if(this.audioElem.paused){
+		if (this.audioElem.paused) {
 			this.audioElem.play();
 		}
 		return new Promise(resolve => {
-			this.fade = setInterval(() => {
+			this.fadeInterval = setInterval(() => {
 				if (this.audioElem.volume <= .01) {
 					this.audioElem.volume = 0;
 					this.audioElem.pause()
-					clearInterval(this.fade);
+					clearInterval(this.fadeInterval);
 					resolve(Date.now() - this.fadeStarted);
 				} else {
 					this.audioElem.volume *= factor;
@@ -136,7 +143,7 @@
 			}, 50)
 		})
 	}
-	async timeFade(time=1) {
+	async timeFade(time = 1) {
 		return await this.factorFade((.99 / (100 * this.audioElem.volume)) ** (50 / (1000 * time - 50)))
 	}
 }
