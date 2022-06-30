@@ -106,7 +106,7 @@ function addActions(elem, blockActions = []) {
         var fadeInput = cell.appendChild(document.createElement("input"))
         fadeInput.classList.add("fadeInput");
         fadeInput.type = "number";
-        fadeInput.value = 5;
+        fadeInput.value = 1;
         fadeInput.title = "Time(in seconds) to fade out";
 		var fadeButton = cell.appendChild(document.createElement("button"))
 		fadeButton.classList.add("fadeButton");
