@@ -10,11 +10,11 @@ async function saveSounds(saveData = JSON.stringify(sounds)) {
 function saveButtonClick() {
     document.getElementById('saveStatus').innerHTML = 'Saving...';
     document.getElementById("saveAllButton").disabled = true;
-	document.body.classList.add("saving")
+    document.body.classList.add("saving")
     saveSounds().then(() => {
         document.getElementById('saveStatus').innerHTML = 'Done!';
         document.getElementById("saveAllButton").disabled = false;
-		document.body.classList.remove("saving")
+        document.body.classList.remove("saving")
     })
 }
 function editSounds() {
@@ -28,7 +28,7 @@ function editSingleSound(sound) {
 async function loadJSON() {
     var savedSounds = await saveFile.text().then(e => JSON.parse(e, (key, val) => !isNaN(key) && !Array.isArray(val) ? Object.assign(new Sound(), val) : val))
     //Parses JSON data while replacing replacing object literals with Sounds
-    savedSounds = savedSounds.filter((e, i) => sounds.map(e=>e.file.name).includes(e.file))
+    savedSounds = savedSounds.filter((e, i) => sounds.map(e => e.file.name).includes(e.file))
     for (var i of savedSounds) {
         i.file = await (await soundDirectory.getFileHandle(i.file)).getFile();
     }
@@ -79,7 +79,7 @@ function addActions(elem, blockActions = []) {
         volumeMirrorButton.classList.add("volumeMirrorButton")
         volumeMirrorButton.title = "Save current volume"
         volumeMirrorButton.innerText = "🕪🖫"
-        volumeMirrorButton.onclick = e => {e.target.parentElement.parentElement.sound.setProp("volume", e.target.parentElement.parentElement.sound.audioElem.volume * 100); if(!editing){saveButtonClick()}}
+        volumeMirrorButton.onclick = e => { e.target.parentElement.parentElement.sound.setProp("volume", e.target.parentElement.parentElement.sound.audioElem.volume * 100); if (!editing) { saveButtonClick() } }
     }
     function addSoundVolumeMirrorButton() {
         var soundVolumeMirrorButton = cell.appendChild(document.createElement("button"))
@@ -93,7 +93,7 @@ function addActions(elem, blockActions = []) {
         startMirrorButton.classList.add("startMirrorButton")
         startMirrorButton.title = "Save current time"
         startMirrorButton.innerText = "◷🖫"
-        startMirrorButton.onclick = e => {e.target.parentElement.parentElement.sound.setProp("start", e.target.parentElement.parentElement.sound.audioElem.currentTime); if(!editing){saveButtonClick()}}
+        startMirrorButton.onclick = e => { e.target.parentElement.parentElement.sound.setProp("start", e.target.parentElement.parentElement.sound.audioElem.currentTime); if (!editing) { saveButtonClick() } }
     }
     function addTimeMirrorButton() {
         var timeMirrorButton = cell.appendChild(document.createElement("button"))
@@ -128,7 +128,7 @@ async function openFiles() {
         await soundDirectory.requestPermission({ mode: "readwrite" })
     }
     for await (i of soundDirectory.values()) {
-        await i.getFile().then(e => e.type.startsWith("audio") ? sounds.push(new Sound(e, e.name)) : e.type == "application/json" ? saveFile = e: e)
+        await i.getFile().then(e => e.type.startsWith("audio") ? sounds.push(new Sound(e, e.name)) : e.type == "application/json" ? saveFile = e : e)
         //if file is not JSON, add it to sound file directory, otherwise store it in config var
     }
     if (typeof saveFile !== "undefined") {
@@ -142,16 +142,18 @@ async function openFiles() {
 }
 async function uploadFile() {
     document.getElementById("uploadFileButton").disabled = true;
-    newFiles = await window.showOpenFilePicker({multiple: true});
-    for (i in newFiles){
+    newFiles = await window.showOpenFilePicker({ multiple: true });
+    for (i in newFiles) {
         newFiles[i] = await newFiles[i].getFile()
-        var newFileHandle = await soundDirectory.getFileHandle(newFiles[i].name, {create:true})
-        var newFileWritable = await newFileHandle.createWritable()
-        await newFileWritable.write(newFiles[i])
-		await newFileWritable.close()
+        if (!sounds.some(e => e.file.name == newFiles[i].name)) {
+            var newFileHandle = await soundDirectory.getFileHandle(newFiles[i].name, { create: true })
+            var newFileWritable = await newFileHandle.createWritable()
+            await newFileWritable.write(newFiles[i])
+            await newFileWritable.close()
+        }
         newFiles[i] = new Sound(newFiles[i])
     }
     sounds = sounds.concat(newFiles);
-    loadSounds()
+    saveSounds()
     document.getElementById("uploadFileButton").disabled = false;
 }
