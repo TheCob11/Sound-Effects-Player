@@ -60,6 +60,17 @@ function addActions(elem, blockActions = []) {
     } else {
         elem.appendChild(cell)
     }
+    function addResetButton() {
+        var resetButton = cell.appendChild(document.createElement("button"))
+        resetButton.classList.add("resetButton")
+        resetButton.title = "Reset to saved values"
+        resetButton.innerText = "↺"
+        resetButton.onclick = e => {
+            var sound = e.target.parentElement.parentElement.sound;
+            sound.elem.replaceWith(sound.createTableRow(document.getElementById("soundTBody")));
+            addActions(sound.elem);
+        }
+    }
     function addEditButton() {
         var editButton = cell.appendChild(document.createElement("button"))
         editButton.classList.add("editButton")
@@ -101,6 +112,9 @@ function addActions(elem, blockActions = []) {
         timeMirrorButton.title = "Set audio time to saved time"
         timeMirrorButton.innerText = "🖫 → ◷"
         timeMirrorButton.onclick = e => e.target.parentElement.parentElement.sound.audioElem.currentTime = e.target.parentElement.parentElement.sound.start;
+    }
+    if (!blockActions.includes("reset")) {
+        addResetButton()
     }
     if (!blockActions.includes("edit")) {
         addEditButton()
