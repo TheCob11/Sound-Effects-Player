@@ -23,6 +23,10 @@ tbody tr:hover {
     background-color: #222;
 }
 
+table.reArr tr:hover{
+    background-color: rgb(110, 165, 110);
+}
+
 button {
     border: 1px solid white;
     border-radius: 8.5px;
@@ -32,7 +36,7 @@ button {
     transition: .3s;
 }
 
-button:hover {
+button:hover, button:active, button.active {
     background-color: #e4e4e4;
     color: #333;
 }

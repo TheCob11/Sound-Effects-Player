@@ -51,6 +51,24 @@ function loadSounds(blockActions) {
 		addActions(row, blockActions)
 	}
 }
+function startRearrange(sound){
+	if(document.querySelector("table").classList.contains("reArr")){
+		endRearrange();
+	}
+	sound.elem.querySelector(".reArrButton").classList.add("active")
+	document.querySelector("table").classList.add("reArr")
+	alert(`Click on a row to put ${sound.name} below, or click on the rearrange button again to cancel`)
+	document.querySelectorAll("tr").forEach(e=>e.onmousedown = function(event){
+		sounds.splice(event.target.rowIndex, 0, sounds.splice(sound.elem.rowIndex, 1)[0]);
+		endRearrange();
+	})
+}
+function endRearrange(){
+	document.querySelector(".reArrButton.active").classList.remove("active");
+	document.querySelector("table").classList.remove("reArr");
+	document.querySelectorAll("tr").forEach(e=> e.onmousedown=null);
+	saveSounds();
+}
 function addActions(elem, blockActions = []) {
 	var cell = document.createElement("td");
 	cell.prop = "actions";
@@ -120,6 +138,13 @@ function addActions(elem, blockActions = []) {
 		deleteButton.innerText = "🗑"
 		deleteButton.onclick = e => {if(confirm(`Are you sure you want to delete ${elem.sound.name}?`)){deleteSound(elem.sound)}};
 	}
+	function addReArrButton() {
+		var reArrButton = cell.appendChild(document.createElement("button"))
+		reArrButton.classList.add("reArrButton")
+		reArrButton.title = "Rearrange this row"
+		reArrButton.innerText = "⇅"
+		reArrButton.onclick = () => startRearrange(elem.sound)
+	}
 	if (!blockActions.includes("reset")) {
 		addResetButton()
 	}
@@ -140,6 +165,9 @@ function addActions(elem, blockActions = []) {
 	}
 	if (!blockActions.includes("timeMirror")) {
 		addTimeMirrorButton()
+	}
+	if (!blockActions.includes("reArr")) {
+		addReArrButton()
 	}
 	if (!blockActions.includes("delete")) {
 		addDeleteButton()
