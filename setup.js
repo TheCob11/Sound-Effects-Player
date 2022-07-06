@@ -1,4 +1,18 @@
-﻿var soundFiles = [], sounds = [], editing = true;
+﻿var soundFiles = [], sounds = [], editing = true, soundDirectory;
+let db;
+const request = indexedDB.open("Database");
+request.onsuccess = event=>{
+	db=event.target.result;
+	db.onerror = e => console.error("Database error: " + e.target.errorCode)
+}
+request.onupgradeneeded = event => {
+	db = event.target.result;
+	const objectStore = db.createObjectStore("directory", {autoIncrement: true})
+	objectStore.transaction.oncomplete = e => {
+		const directoryObjectStore = db.transaction("directory", "readwrite").objectStore("directory");
+		directoryObjectStore.add(undefined);
+	}
+}
 async function saveSounds(saveData = JSON.stringify(sounds)) {
 	saveFile = await soundDirectory.getFileHandle("sounds.json", { create: true })
 	fileWrite = await saveFile.createWritable()
@@ -182,9 +196,22 @@ function addActions(elem, blockActions = []) {
 		addDeleteButton()
 	}
 }
+async function openDir() {
+	startDir = "desktop";
+	var objectStore = db.transaction(["directory"], "readonly").objectStore("directory");
+	const request = objectStore.get(1)
+	request.onsuccess = async event => {
+		if (event.target.result != undefined) {
+			startDir = event.target.result
+		}
+		soundDirectory = await window.showDirectoryPicker({ id: "sounds", mode: "readwrite", startIn: startDir });
+		objectStore = db.transaction(["directory"], "readwrite").objectStore("directory");
+		const requestUpdate = objectStore.put(soundDirectory, 1)
+		requestUpdate.onsuccess = e => openFiles();
+	}
+}
 async function openFiles() {
 	document.getElementById("openFilesButton").classList.remove("unopened");
-	soundDirectory = await window.showDirectoryPicker()
 	if (await soundDirectory.queryPermission({ mode: "readwrite" }) != "granted") {
 		await soundDirectory.requestPermission({ mode: "readwrite" })
 	}
@@ -199,7 +226,7 @@ async function openFiles() {
 		await saveSounds()
 		editing = true;
 	}
-	loadSounds()
+	return loadSounds()
 }
 async function uploadFile() {
 	document.getElementById("uploadFileButton").disabled = true;
