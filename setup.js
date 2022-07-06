@@ -51,22 +51,31 @@ function loadSounds(blockActions) {
 		addActions(row, blockActions)
 	}
 }
-function startRearrange(sound){
-	if(document.querySelector("table").classList.contains("reArr")){
-		endRearrange();
-	}
-	sound.elem.querySelector(".reArrButton").classList.add("active")
-	document.querySelector("table").classList.add("reArr")
+function startRearrange(sound) {
 	alert(`Click on a row to put ${sound.name} below, or click on the rearrange button again to cancel`)
-	document.querySelectorAll("tr").forEach(e=>e.onmousedown = function(event){
-		sounds.splice(event.target.rowIndex, 0, sounds.splice(sound.elem.rowIndex, 1)[0]);
+	sound.elem.classList.add("reArring")
+	sound.elem.querySelector(".reArrButton").classList.add("active")
+	document.querySelectorAll("button:not(.active)").forEach(e=>e.disabled=true)
+	document.querySelector("table").classList.add("reArr")
+	document.querySelectorAll("tr").forEach(e => e.onmousedown = function (event) {
+		if (event.path.some(e => e.matches && (e.matches("button") || e.matches(".reArring")))) {
+			return;
+		}
+		var fromIndex = sound.elem.rowIndex - 1
+		var toIndex = event.path.find(e => e.tagName == "TR").rowIndex
+		if(toIndex>fromIndex){
+			toIndex--
+		}
+		sounds.splice(toIndex, 0, sounds.splice(fromIndex, 1)[0]);
 		endRearrange();
 	})
 }
-function endRearrange(){
+function endRearrange() {
 	document.querySelector(".reArrButton.active").classList.remove("active");
+	document.querySelectorAll("button").forEach(e=>e.disabled = false);
+	document.querySelector("tr.reArring").classList.remove("reArring")
 	document.querySelector("table").classList.remove("reArr");
-	document.querySelectorAll("tr").forEach(e=> e.onmousedown=null);
+	document.querySelectorAll("tr").forEach(e => e.onmousedown = null);
 	saveSounds();
 }
 function addActions(elem, blockActions = []) {
@@ -136,14 +145,14 @@ function addActions(elem, blockActions = []) {
 		deleteButton.classList.add("deleteButton")
 		deleteButton.title = "Delete this sound effect"
 		deleteButton.innerText = "🗑"
-		deleteButton.onclick = e => {if(confirm(`Are you sure you want to delete ${elem.sound.name}?`)){deleteSound(elem.sound)}};
+		deleteButton.onclick = e => { if (confirm(`Are you sure you want to delete ${elem.sound.name}?`)) { deleteSound(elem.sound) } };
 	}
 	function addReArrButton() {
 		var reArrButton = cell.appendChild(document.createElement("button"))
 		reArrButton.classList.add("reArrButton")
 		reArrButton.title = "Rearrange this row"
 		reArrButton.innerText = "⇅"
-		reArrButton.onclick = () => startRearrange(elem.sound)
+		reArrButton.onclick = e => e.target.classList.contains("active")?endRearrange():startRearrange(elem.sound)
 	}
 	if (!blockActions.includes("reset")) {
 		addResetButton()

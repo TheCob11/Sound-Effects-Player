@@ -27,6 +27,15 @@ table.reArr tr:hover{
     background-color: rgb(110, 165, 110);
 }
 
+table.reArr tr.reArring{
+    background-color: #333;
+}
+
+table.reArr button:disabled {
+    background-color: revert;
+    color: revert;
+}
+
 button {
     border: 1px solid white;
     border-radius: 8.5px;
